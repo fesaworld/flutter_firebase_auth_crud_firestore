@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_firebase_auth_crud_firestore/screen/splashscreen/splash_view.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -17,7 +18,7 @@ class MyApp extends StatelessWidget {
             useMaterial3: false,
             fontFamily: GoogleFonts.karla().fontFamily
         ),
-        home: const Placeholder()
+        home: const SplashView()
     );
   }
 }
