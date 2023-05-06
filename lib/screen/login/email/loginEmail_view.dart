@@ -16,84 +16,108 @@ class LoginEmailView extends StatelessWidget {
             backgroundColor: Colors.orange.shade50,
             body: SafeArea(
                 child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  //* TITLE
-                  Text('SIGN IN WITH EMAIL/PASSWORD', style: title),
-                  const SizedBox(height: 10),
-                  const Text("You haven't signed in yet"),
-                  Container(
-                    margin: const EdgeInsets.fromLTRB(30, 15, 30, 10),
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 0, horizontal: 15),
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(15)),
-                    child: TextField(
-                      controller: controller.emailController,
-                      cursorColor: Colors.orange,
-                      decoration: const InputDecoration(
-                          border: InputBorder.none, hintText: 'Email'),
+              child: Form(
+                key: controller.formKey,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    //* TITLE
+                    Text('SIGN IN WITH EMAIL/PASSWORD', style: title),
+                    const SizedBox(height: 10),
+                    const Text("You haven't signed in yet"),
+                    Container(
+                      margin: const EdgeInsets.fromLTRB(30, 15, 30, 10),
+                      padding:
+                          const EdgeInsets.symmetric(vertical: 0, horizontal: 15),
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(15)),
+                      child: TextFormField(
+                        validator: (email){
+                          if (email!.isEmpty) {
+                            return "Email cannot be empty";
+                          }else if(!RegExp(
+                              r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                              .hasMatch(email)) {
+                            return "Email is invalid";
+                          }
+                          return null;
+                        },
+                        controller: controller.emailController,
+                        cursorColor: Colors.orange,
+                        decoration: const InputDecoration(
+                            border: InputBorder.none, hintText: 'Email'),
+                      ),
                     ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.fromLTRB(30, 0, 30, 15),
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 0, horizontal: 15),
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(15)),
-                    child: TextField(
-                      controller: controller.passwordController,
-                      cursorColor: Colors.orange,
-                      decoration: const InputDecoration(
-                          border: InputBorder.none, hintText: 'Password'),
+                    SizedBox(height: 10,),
+                    Container(
+                      margin: const EdgeInsets.fromLTRB(30, 0, 30, 15),
+                      padding:
+                          const EdgeInsets.symmetric(vertical: 0, horizontal: 15),
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(15)),
+                      child: TextFormField(
+                        validator: (password){
+                          if (password!.isEmpty) {
+                            return "Password cannot be empty";
+                          }else if(password!.length < 6) {
+                            return "Minimum password contain 6 characters";
+                          }
+                          return null;
+                        },
+                        controller: controller.passwordController,
+                        cursorColor: Colors.orange,
+                        decoration: const InputDecoration(
+                            border: InputBorder.none, hintText: 'Password'),
+                      ),
                     ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        width: 150,
-                        child: ElevatedButton(
-                            style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty.all(
-                                    Colors.orange.shade900)),
-                            onPressed: () async {
-                              controller.signupDialog();
-                            },
-                            child: const Text("Sign Up")),
-                      ),
-                      const SizedBox(
-                        width: 15,
-                      ),
-                      SizedBox(
-                        width: 150,
-                        child: ElevatedButton(
-                            style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty.all(
-                                    Colors.orange.shade900)),
-                            onPressed: () async {
-                              controller.login(
-                                  email: controller.emailController.text,
-                                  password: controller.passwordController.text
-                              );
-                            },
-                            child: const Text("Log In")),
-                      ),
-                    ],
-                  ),
-                  //* RESET PASSWORD BUTTON
-                  TextButton(
-                      onPressed: () async {
-                        controller.forgot(email: controller.emailController.text);
-                      },
-                      child: Text(
-                        'Forgot password?',
-                        style: TextStyle(color: Colors.orange.shade900),
-                      ))
-                ],
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          width: 150,
+                          child: ElevatedButton(
+                              style: ButtonStyle(
+                                  backgroundColor: MaterialStateProperty.all(
+                                      Colors.orange.shade900)),
+                              onPressed: () async {
+                                controller.signupDialog();
+                              },
+                              child: const Text("Sign Up")),
+                        ),
+                        const SizedBox(
+                          width: 15,
+                        ),
+                        SizedBox(
+                          width: 150,
+                          child: ElevatedButton(
+                              style: ButtonStyle(
+                                  backgroundColor: MaterialStateProperty.all(
+                                      Colors.orange.shade900)),
+                              onPressed: () {
+                                if(controller.formKey.currentState!.validate()) {
+                                  controller.login(
+                                      email: controller.emailController.text,
+                                      password: controller.passwordController.text
+                                  );
+                                }
+                              },
+                              child: const Text("Log In")),
+                        ),
+                      ],
+                    ),
+                    //* RESET PASSWORD BUTTON
+                    TextButton(
+                        onPressed: () async {
+                          controller.forgot(email: controller.emailController.text);
+                        },
+                        child: Text(
+                          'Forgot password?',
+                          style: TextStyle(color: Colors.orange.shade900),
+                        ))
+                  ],
+                ),
               ),
             )),
           );
