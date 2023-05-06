@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1014082469054",
+    "project_id": "fir-auth-crud-firestore",
+    "storage_bucket": "fir-auth-crud-firestore.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1014082469054:android:5db1c4cec6329f72fa72ef",
+        "android_client_info": {
+          "package_name": "com.fesaworld.flutter_firebase_auth_crud_firestore"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1014082469054-h8b1hetflivg95dr6pbb952kbqqet3j3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.fesaworld.flutter_firebase_auth_crud_firestore",
+            "certificate_hash": "106615da96bae1b1b422b7741a0b2b7c0f1fb9fd"
+          }
+        },
+        {
+          "client_id": "1014082469054-12vd8hecir06g87irfbo5h4tvdd88uu4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAG89yiijmmMonnOfytvwyzPgKFQgVKRuw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1014082469054-12vd8hecir06g87irfbo5h4tvdd88uu4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
