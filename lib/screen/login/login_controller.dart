@@ -6,7 +6,12 @@ import 'package:get/get.dart';
 class LoginController extends BaseController {
 
   void anonymousLogin() {
-
+    try {
+      FirebaseAuth.instance.signInAnonymously();
+      Get.offAll(const MainpageView());
+    } on FirebaseException catch (e) {
+      print(e.message);
+    }
   }
 
   void emailLogin() {
