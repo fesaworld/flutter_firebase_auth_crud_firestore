@@ -15,10 +15,65 @@ class LoginView extends StatelessWidget {
           return Scaffold(
             body: SafeArea(
               child: Center(
-                child: Text(
-                  'Login Body',
-                  style: subTitle,
-                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'SIGN IN PAGE',
+                      style: title
+                    ),
+                    const SizedBox(height: 10),
+                    const Text("Select one method to sign in"),
+                    const SizedBox(height: 15),
+                    SizedBox(
+                      width: 150,
+                      child: ElevatedButton(
+                          style: ButtonStyle(
+                              backgroundColor:
+                              MaterialStateProperty.all(Colors.lightBlue.shade900)),
+                          onPressed: () {
+                            controller.anonymousLogin();
+                          },
+                          child: const Text("Anonymous")),
+                    ),
+                    const SizedBox(height: 5),
+                    SizedBox(
+                      width: 150,
+                      child: ElevatedButton(
+                          style: ButtonStyle(
+                              backgroundColor:
+                              MaterialStateProperty.all(Colors.lightBlue.shade900)),
+                          onPressed: () {
+                            controller.emailLogin();
+                          },
+                          child: const Text("Email")),
+                    ),
+                    const SizedBox(height: 5),
+                    SizedBox(
+                      width: 150,
+                      child: ElevatedButton(
+                          style: ButtonStyle(
+                              backgroundColor:
+                              MaterialStateProperty.all(Colors.lightBlue.shade900)),
+                          onPressed: () {
+                            controller.googleLogin();
+                          },
+                          child: const Text("Google Account")),
+                    ),
+                    const SizedBox(height: 5),
+                    SizedBox(
+                      width: 150,
+                      child: ElevatedButton(
+                          style: ButtonStyle(
+                              backgroundColor:
+                              MaterialStateProperty.all(Colors.lightBlue.shade900)),
+                          onPressed: () {
+                            controller.phoneLogin();
+                          },
+                          child: const Text("Phone Number")),
+                    )
+                  ],
+                )
               ),
             ),
           );
