@@ -43,6 +43,7 @@ class MainpageView extends StatelessWidget {
                     child: SingleChildScrollView(
                       physics: AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
                       child: Column(children: [
+                        // sekali ambil
                         // FutureBuilder<QuerySnapshot>(
                         //   future: notes.get(),
                         //   builder: (_, snapshot){
@@ -62,6 +63,7 @@ class MainpageView extends StatelessWidget {
                         //   }
                         // ),
 
+                        // ngelisten terus
                         // StreamBuilder<QuerySnapshot>(
                         //     stream: notes.snapshots(),
                         //     builder: (_, snapshot) {
@@ -111,34 +113,68 @@ class MainpageView extends StatelessWidget {
                               child: const Text("Log Out")),
                         ),
 
-                        controller.isLoading
-                            ? Center(
-                                child: Column(
-                                  children: const [
-                                    SizedBox(height: 20),
-                                    CircularProgressIndicator.adaptive(),
-                                    SizedBox(height: 10),
-                                    Text('Loading')
-                                  ],
-                                ),
-                              )
-                            :controller.noteList.length > 0
-                                  ? ListView.builder(
-                                      physics: NeverScrollableScrollPhysics(),
-                                      scrollDirection: Axis.vertical,
-                                      shrinkWrap: true,
-                                      itemCount: controller.noteList?.length,
-                                      itemBuilder: (context, index) {
-                                        return NotesCardWidget(
-                                            onTap: () {
-                                            },
-                                            titleNote: (controller.noteList as dynamic)[index].title,
-                                            subTitleNote: (controller.noteList as dynamic)[index].body,
-                                        );
-                                      })
-                                  :  const Center(
-                                      child: Text('Data not found'),
-                                    )
+                        // controller.isLoading
+                        //     ? Center(
+                        //         child: Column(
+                        //           children: const [
+                        //             SizedBox(height: 20),
+                        //             CircularProgressIndicator.adaptive(),
+                        //             SizedBox(height: 10),
+                        //             Text('Loading')
+                        //           ],
+                        //         ),
+                        //       )
+                        //     : controller.noteList.length > 0
+                        //           ?
+                        //             // ListView.builder(
+                        //             //   physics: NeverScrollableScrollPhysics(),
+                        //             //   scrollDirection: Axis.vertical,
+                        //             //   shrinkWrap: true,
+                        //             //   itemCount: controller.noteList.length,
+                        //             //   itemBuilder: (context, index) {
+                        //             //     return NotesCardWidget(
+                        //             //         onTap: () {
+                        //             //           controller.updateDataDialog(
+                        //             //               uuid: controller.uuid ?? '',
+                        //             //               title: controller.noteList[index].title ?? '',
+                        //             //               subTitle: controller.noteList[index].body ?? ''
+                        //             //           );
+                        //             //         },
+                        //             //         titleNote: controller.noteList[index].title ?? '',
+                        //             //         subTitleNote: controller.noteList[index].body ?? '',
+                        //             //     );
+                        //             //   })
+                        //           :  const Center(
+                        //               child: Text('Data not found'),
+                        //             )
+
+                        StreamBuilder<QuerySnapshot>(
+                            stream: controller.notesCollection?.where('uuid', isEqualTo: controller.uuid).orderBy('timestamp', descending: true).snapshots(),
+                            builder: (_, snapshot) {
+                              if (snapshot.hasData) {
+                                return Column(
+                                  children: snapshot.data!.docs
+                                      .map((e) => NotesCardWidget(
+                                    onTap: () {
+                                      controller.updateDataDialog(
+                                          id: e.id,
+                                          uuid: (e.data() as dynamic)['uuid'],
+                                          title: (e.data() as dynamic)['title'],
+                                          subTitle: (e.data() as dynamic)['body'],
+                                      );
+                                    },
+                                    titleNote:
+                                    (e.data() as dynamic)['title'],
+                                    subTitleNote:
+                                    (e.data() as dynamic)['body'],
+                                  ))
+                                      .toList(),
+                                );
+                              } else {
+                                return Text('Loading');
+                              }
+                            }),
+
                       ]),
                     )),
               ),

@@ -13,6 +13,7 @@ class MainpageController extends BaseController {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   CollectionReference? notesCollection;
 
+  Notes? notesModel;
   List<Notes> noteList = [];
   String? uuid;
   bool isLoading = false;
@@ -22,7 +23,7 @@ class MainpageController extends BaseController {
     uuid = FirebaseAuth.instance.currentUser?.uid;
     notesCollection = firestore.collection('notes');
 
-    readData(uuid: uuid!);
+    // readData(uuid: uuid!);
     update();
   }
 
@@ -36,27 +37,28 @@ class MainpageController extends BaseController {
     }
   }
 
-  Future readData({required String uuid}) async {
-    noteList = [];
-    isLoading = true;
-    update();
-
-    try{
-      QuerySnapshot<Map<String, dynamic>> snapshot = await firestore
-          .collection("notes")
-          .where('uuid', isEqualTo: uuid)
-          .orderBy('timestamp', descending: false)
-          .get();
-      noteList = snapshot.docs
-          .map((docSnapshot) => Notes.fromDocumentSnapshot(docSnapshot))
-          .toList();
-
-      isLoading = false;
-      update();
-    } on FirebaseException catch (e){
-      print(e.message);
-    }
-  }
+  // Future readData({required String uuid}) async {
+  //   noteList = [];
+  //   isLoading = true;
+  //   update();
+  //
+  //   try{
+  //     QuerySnapshot<Map<String, dynamic>> snapshot = await firestore
+  //         .collection("notes")
+  //         .where('uuid', isEqualTo: uuid)
+  //         .orderBy('timestamp', descending: true)
+  //         .get();
+  //
+  //     noteList = snapshot.docs
+  //         .map((docSnapshot) => Notes.fromDocumentSnapshot(docSnapshot))
+  //         .toList();
+  //
+  //     isLoading = false;
+  //     update();
+  //   } on FirebaseException catch (e){
+  //     print(e.message);
+  //   }
+  // }
 
   Future createDataDialog({required String uuid}) async {
     List result = await Get.dialog(
@@ -65,18 +67,6 @@ class MainpageController extends BaseController {
           isUpdate: false,
           titleNote: '',
           subTitleNote: '',
-          // onDeleted: () {
-          //   // Get.back();
-          //   // Get.back();
-          //   // print('deleted');
-          //   // update();
-          // },
-          // onSave: () {
-          //   // print('saved');
-          //   // Get.back();
-          //   //
-          //   // update();
-          // },
         ));
 
     if (result.isNotEmpty) {
@@ -97,6 +87,45 @@ class MainpageController extends BaseController {
       'timestamp': DateTime.now()
     });
 
-    readData(uuid:uuid);
+    // readData(uuid:uuid);
+  }
+
+  Future updateDataDialog({required String id, required String uuid, required String title, required String subTitle}) async {
+    List result = await Get.dialog(
+        barrierDismissible: false,
+        UpdateDialogWidget(
+          isUpdate: true,
+          titleNote: title,
+          subTitleNote: subTitle,
+        )
+    );
+
+    if (result.length > 1) {
+      updateData(id: id, uuid: uuid, title: result[0], body: result[1]);
+    }else if (result.length == 1 && result[0] == true) {
+      deleteData(id: id, uuid: uuid);
+    }else{
+      Get.back();
+    }
+  }
+
+  Future updateData(
+      {required String id,
+        required String uuid,
+        required String title,
+        required String body}) async {
+    await notesCollection?.doc(id).update({
+      'title': title,
+      'body': body,
+      'timestamp': DateTime.now()
+    });
+
+    // readData(uuid:uuid);
+  }
+
+  Future deleteData(
+      {required String id, required String uuid}) async {
+    await notesCollection?.doc(id).delete();
+    // readData(uuid:uuid);
   }
 }

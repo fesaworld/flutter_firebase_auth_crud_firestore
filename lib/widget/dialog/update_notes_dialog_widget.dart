@@ -80,12 +80,16 @@ class UpdateDialogWidget extends StatelessWidget {
                     style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all(
                             ColorPalette.danger)),
-                    onPressed: () {
+                    onPressed: () async {
                       if (isUpdate){
-                        Get.dialog(
+                        bool result = await Get.dialog(
                             barrierDismissible: false,
-                            WarningDialogWidget(onDelete: (){})
+                            WarningDialogWidget()
                         );
+
+                        if (result){
+                          Get.back(result : [result]);
+                        }
                       }else{
                         Get.back(result: []);
                       }
@@ -115,8 +119,7 @@ class UpdateDialogWidget extends StatelessWidget {
 }
 
 class WarningDialogWidget extends StatelessWidget {
-  final VoidCallback? onDelete;
-  const WarningDialogWidget({Key? key, required this.onDelete}) : super(key: key);
+  const WarningDialogWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -133,7 +136,9 @@ class WarningDialogWidget extends StatelessWidget {
                   style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(
                           ColorPalette.danger)),
-                  onPressed: onDelete,
+                  onPressed: (){
+                    Get.back(result: true);
+                  },
                   child: const Text("Hapus")),
             ),
             const SizedBox(
