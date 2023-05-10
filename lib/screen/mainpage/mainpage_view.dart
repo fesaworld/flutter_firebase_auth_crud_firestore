@@ -19,6 +19,12 @@ class MainpageView extends StatelessWidget {
         init: MainpageController(),
         builder: (controller){
           return Scaffold(
+            floatingActionButton: FloatingActionButton(
+              onPressed: () {
+                controller.createDataDialog(uuid: controller.uuid!);
+              },
+              child: const Icon(Icons.add),
+            ),
             appBar: AppBar(
               title: Text(
                 'CRUD Learn APP',

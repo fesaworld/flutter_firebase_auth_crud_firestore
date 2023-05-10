@@ -57,4 +57,46 @@ class MainpageController extends BaseController {
       print(e.message);
     }
   }
+
+  Future createDataDialog({required String uuid}) async {
+    List result = await Get.dialog(
+        barrierDismissible: false,
+        UpdateDialogWidget(
+          isUpdate: false,
+          titleNote: '',
+          subTitleNote: '',
+          // onDeleted: () {
+          //   // Get.back();
+          //   // Get.back();
+          //   // print('deleted');
+          //   // update();
+          // },
+          // onSave: () {
+          //   // print('saved');
+          //   // Get.back();
+          //   //
+          //   // update();
+          // },
+        ));
+
+    if (result.isNotEmpty) {
+      createData(uuid: uuid, title: result[0], body: result[1]);
+    }else{
+      Get.back();
+    }
+  }
+
+  Future createData(
+      {required String uuid,
+        required String title,
+        required String body}) async {
+    await notesCollection?.add({
+      'uuid': uuid,
+      'title': title,
+      'body': body,
+      'timestamp': DateTime.now()
+    });
+
+    readData(uuid:uuid);
+  }
 }

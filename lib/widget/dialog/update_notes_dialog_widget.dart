@@ -5,11 +5,12 @@ import 'package:get/get.dart';
 import '../../const/text_style.dart';
 
 class UpdateDialogWidget extends StatelessWidget {
+  final bool isUpdate;
   final String titleNote;
   final String subTitleNote;
-  final VoidCallback? onDeleted;
-  final VoidCallback? onSave;
-  UpdateDialogWidget({Key? key, required this.titleNote, required this.subTitleNote, required this.onDeleted, required this.onSave}) : super(key: key);
+  // final VoidCallback? onDeleted;
+  // final VoidCallback? onSave;
+  UpdateDialogWidget({Key? key, required this.isUpdate, required this.titleNote, required this.subTitleNote}) : super(key: key);
 
   TextEditingController noteTitleController = TextEditingController();
   TextEditingController noteBodyController = TextEditingController();
@@ -45,6 +46,7 @@ class UpdateDialogWidget extends StatelessWidget {
                 border: OutlineInputBorder(
                     borderRadius:
                     BorderRadius.circular(8)),
+                hintText: 'Insert title here'
               ),
             )
         ),
@@ -64,6 +66,7 @@ class UpdateDialogWidget extends StatelessWidget {
                 enabledBorder: InputBorder.none,
                 errorBorder: InputBorder.none,
                 disabledBorder: InputBorder.none,
+                hintText: 'Insert notes here'
             ),
           )
         ),
@@ -78,12 +81,16 @@ class UpdateDialogWidget extends StatelessWidget {
                         backgroundColor: MaterialStateProperty.all(
                             ColorPalette.danger)),
                     onPressed: () {
-                      Get.dialog(
-                        barrierDismissible: false,
-                           WarningDialogWidget(onDelete: onDeleted)
-                      );
+                      if (isUpdate){
+                        Get.dialog(
+                            barrierDismissible: false,
+                            WarningDialogWidget(onDelete: (){})
+                        );
+                      }else{
+                        Get.back(result: []);
+                      }
                     },
-                    child: const Text("Hapus")),
+                    child: isUpdate ? const Text("Hapus") : const Text("Batal")),
               ),
               const SizedBox(
                 width: 15,
@@ -94,7 +101,9 @@ class UpdateDialogWidget extends StatelessWidget {
                     style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all(
                             Colors.orange.shade900)),
-                    onPressed: onSave,
+                    onPressed: (){
+                      Get.back(result: [noteTitleController.text, noteBodyController.text]);
+                    },
                     child: const Text("Simpan", style: TextStyle(color: ColorPalette.white),)),
               ),
             ],
