@@ -144,7 +144,13 @@ class MainpageView extends StatelessWidget {
                                       .toList(),
                                 );
                               } else {
-                                return Text('Loading');
+                                return Column(
+                                  children: [
+                                    CircularProgressIndicator.adaptive(),
+                                    SizedBox(height: 10,),
+                                    Text('Loading'),
+                                  ],
+                                );
                               }
                             }),
 
