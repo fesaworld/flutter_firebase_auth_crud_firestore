@@ -1,18 +1,25 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_auth_crud_firestore/base/base_controller.dart';
+import 'package:flutter_firebase_auth_crud_firestore/data/secure_storage.dart';
+import 'package:flutter_firebase_auth_crud_firestore/screen/bottomappbar/bottomappbar_view.dart';
 import 'package:flutter_firebase_auth_crud_firestore/screen/login/email/loginEmail_view.dart';
 import 'package:flutter_firebase_auth_crud_firestore/screen/login/phone/loginPhone_view.dart';
-import 'package:flutter_firebase_auth_crud_firestore/screen/mainpage/mainpage_view.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class LoginController extends BaseController {
 
-  void anonymousLogin() {
+  final Storage _storage = Storage();
+  
+  Future<void> anonymousLogin() async {
     try {
-      FirebaseAuth.instance.signInAnonymously();
-      Get.offAll(const MainpageView());
+      await FirebaseAuth.instance.signInAnonymously();
+      await _storage.saveUid(FirebaseAuth.instance.currentUser!.uid);
+
+      Get.offAll(const BottomappbarView());
+
+
     } on FirebaseException catch (e) {
       print(e.message);
     }
@@ -33,8 +40,9 @@ class LoginController extends BaseController {
         );
 
         await FirebaseAuth.instance.signInWithCredential(credential);
+        await _storage.saveUid(FirebaseAuth.instance.currentUser!.uid);
 
-        Get.offAll(const MainpageView());
+        Get.offAll(const BottomappbarView());
       } on FirebaseException catch (e) {
         showSnackbar(
             title: 'Error',

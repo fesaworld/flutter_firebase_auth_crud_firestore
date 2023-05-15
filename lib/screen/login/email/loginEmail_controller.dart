@@ -3,16 +3,19 @@ import 'dart:core';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_firebase_auth_crud_firestore/data/secure_storage.dart';
 import 'package:flutter_firebase_auth_crud_firestore/screen/mainpage/mainpage_view.dart';
 import 'package:get/get.dart';
 
 import '../../../base/base_controller.dart';
 import '../../../widget/dialog/signin_dialog_widget.dart';
+import '../../bottomappbar/bottomappbar_view.dart';
 
 class LoginEmailController extends BaseController{
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final formKey = GlobalKey<FormState>();
+  final Storage _storage = Storage();
 
   @override
   void onInit() {
@@ -66,8 +69,9 @@ class LoginEmailController extends BaseController{
           email: email,
           password: password
       );
+      await _storage.saveUid(FirebaseAuth.instance.currentUser!.uid);
 
-      Get.offAll(const MainpageView());
+      Get.offAll(const BottomappbarView());
     }
     on FirebaseException catch (e) {
       print(e.message);

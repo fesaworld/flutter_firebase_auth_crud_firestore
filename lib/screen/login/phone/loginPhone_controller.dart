@@ -1,13 +1,16 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_firebase_auth_crud_firestore/data/secure_storage.dart';
 import 'package:flutter_firebase_auth_crud_firestore/screen/mainpage/mainpage_view.dart';
 import 'package:get/get.dart';
 
 import '../../../base/base_controller.dart';
+import '../../bottomappbar/bottomappbar_view.dart';
 
 class LoginPhoneController extends BaseController {
   final formKey = GlobalKey<FormState>();
   final phoneController = TextEditingController();
+  final Storage _storage = Storage();
 
   @override
   void onInit() {
@@ -39,9 +42,10 @@ class LoginPhoneController extends BaseController {
                 verificationId: verificationId, smsCode: smsCode);
 
             try {
-              FirebaseAuth.instance.signInWithCredential(credential);
+              await FirebaseAuth.instance.signInWithCredential(credential);
+              await _storage.saveUid(FirebaseAuth.instance.currentUser!.uid);
 
-              Get.offAll(const MainpageView());
+              Get.offAll(const BottomappbarView());
             } on FirebaseException catch (e) {
               showSnackbar(title: 'Error', subTitle: e.message);
             }
