@@ -27,16 +27,6 @@ class MainpageController extends BaseController {
     update();
   }
 
-  void logout() {
-    try {
-      GoogleSignIn().signOut();
-      FirebaseAuth.instance.signOut();
-      Get.offAll(const LoginView());
-    } on FirebaseException catch (e) {
-      print(e.message);
-    }
-  }
-
   // Future readData({required String uuid}) async {
   //   noteList = [];
   //   isLoading = true;

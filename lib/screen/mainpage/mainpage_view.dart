@@ -85,34 +85,6 @@ class MainpageView extends StatelessWidget {
                         //         return Text('Loading');
                         //       }
                         //     }),
-
-                        const SizedBox(height: 10),
-                        Text('Welcome Mainpage', style: title),
-                        const SizedBox(height: 10),
-                        StreamBuilder<User?>(
-                            stream: FirebaseAuth.instance.userChanges(),
-                            builder: (context, snapshot) {
-                              if (snapshot.hasData) {
-                                return Text('Log In: ${snapshot.data?.uid}');
-                              } else {
-                                return const Text("Select one method to sign in");
-                              }
-                            }),
-                        const SizedBox(height: 15),
-                        Text(controller.uuid ?? 'kosong'),
-                        const SizedBox(height: 15),
-                        SizedBox(
-                          width: 150,
-                          child: ElevatedButton(
-                              style: ButtonStyle(
-                                  backgroundColor: MaterialStateProperty.all(
-                                      Colors.lightBlue.shade900)),
-                              onPressed: () {
-                                controller.logout();
-                              },
-                              child: const Text("Log Out")),
-                        ),
-
                         // controller.isLoading
                         //     ? Center(
                         //         child: Column(
@@ -148,6 +120,7 @@ class MainpageView extends StatelessWidget {
                         //               child: Text('Data not found'),
                         //             )
 
+                        const SizedBox(height: 10),
                         StreamBuilder<QuerySnapshot>(
                             stream: controller.notesCollection?.where('uuid', isEqualTo: controller.uuid).orderBy('timestamp', descending: true).snapshots(),
                             builder: (_, snapshot) {
