@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_firebase_auth_crud_firestore/base/base_controller.dart';
+import 'package:flutter_firebase_auth_crud_firestore/data/secure_storage.dart';
 import 'package:flutter_firebase_auth_crud_firestore/screen/login/login_view.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -10,6 +11,7 @@ import '../../data/model/notes_model.dart';
 import '../../widget/dialog/update_notes_dialog_widget.dart';
 
 class MainpageController extends BaseController {
+  final Storage _storage = Storage();
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   CollectionReference? notesCollection;
 
@@ -20,7 +22,7 @@ class MainpageController extends BaseController {
 
   @override
   Future<void> onInit() async {
-    uuid = FirebaseAuth.instance.currentUser?.uid;
+    uuid = await _storage.readUid();
     notesCollection = firestore.collection('notes');
 
     // readData(uuid: uuid!);
