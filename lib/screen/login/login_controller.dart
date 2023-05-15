@@ -8,17 +8,28 @@ import 'package:flutter_firebase_auth_crud_firestore/screen/login/phone/loginPho
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
+import '../../data/repository/user_profile.dart';
+
 class LoginController extends BaseController {
 
   final Storage _storage = Storage();
+  final UserProfile _userProfile = UserProfile();
   
   Future<void> anonymousLogin() async {
     try {
       await FirebaseAuth.instance.signInAnonymously();
       await _storage.saveUid(FirebaseAuth.instance.currentUser!.uid);
+      await _userProfile.addUser(
+          uuid: FirebaseAuth.instance.currentUser?.uid ?? '',
+          username: '',
+          email: '',
+          dob: DateTime.now(),
+          profileImage: '',
+          address: '',
+          timeStamp: DateTime.now()
+      );
 
       Get.offAll(const BottomappbarView());
-
 
     } on FirebaseException catch (e) {
       print(e.message);
@@ -41,6 +52,15 @@ class LoginController extends BaseController {
 
         await FirebaseAuth.instance.signInWithCredential(credential);
         await _storage.saveUid(FirebaseAuth.instance.currentUser!.uid);
+        await _userProfile.addUser(
+            uuid: FirebaseAuth.instance.currentUser?.uid ?? '',
+            username: FirebaseAuth.instance.currentUser?.displayName ?? '',
+            email: FirebaseAuth.instance.currentUser?.email ?? '',
+            dob: DateTime.now(),
+            profileImage: FirebaseAuth.instance.currentUser?.photoURL ?? '',
+            address: '',
+            timeStamp: DateTime.now()
+        );
 
         Get.offAll(const BottomappbarView());
       } on FirebaseException catch (e) {

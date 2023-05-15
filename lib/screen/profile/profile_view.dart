@@ -91,7 +91,7 @@ class ProfileView extends StatelessWidget {
                                     )),
                               ),
                               const SizedBox(height: 10),
-                              Text('Welcome', style: title),
+                              Text('Welcome, ${snapshot.data?.docs.length != 0 ? snapshot.data?.docs[0]['username'] : 'guest'}', style: title),
                               const SizedBox(height: 10),
                               Text(
                                   'Log In: ${snapshot.data?.docs.length != 0 ? snapshot.data?.docs[0]['uuid'] : 'guest'}'),
